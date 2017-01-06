@@ -82,11 +82,18 @@ def gflags_library(hdrs=[], srcs=[], threads=1):
         name += "_nothreads"
         copts.append("-DNO_THREADS")
     native.cc_library(
-        name       = name,
+        name       = name + "_impl",
         hdrs       = hdrs,
         srcs       = srcs,
-        includes   = ["include/"],
         copts      = copts,
         linkopts   = linkopts,
-        visibility = ["//visibility:public"]
+        includes = ["include/"],
+        visibility = ["//visibility:private"],
+    )
+    native.cc_inc_library(
+        name       = name,
+        hdrs       = hdrs,
+        prefix = "include/",
+        visibility = ["//visibility:public"],
+        deps = [":gflags_impl"],
     )
